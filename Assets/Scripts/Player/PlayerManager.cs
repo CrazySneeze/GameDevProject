@@ -2,17 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MoveControl : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     // Start is called before the first frame update
+    public Player player;
     void Start()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        player = new Player(transform.position);
     }
 }

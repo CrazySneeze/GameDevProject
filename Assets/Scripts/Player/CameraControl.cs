@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraFollow : MonoBehaviour
+public class CameraControl : MonoBehaviour
 {
     public Vector3 offset = new Vector3(0, 1, 0);
     public enum RotationAxes { MouseXAndY = 0, MouseX = 1, MouseY = 2 }
@@ -18,14 +18,8 @@ public class CameraFollow : MonoBehaviour
     float rotationY = 0F;
 
 
-    public float moveSpeed = 5F;
-    public Vector3 jumpForce;
-    // Update is called once per frame
     void Update()
     {
-        var p = GameObject.FindGameObjectWithTag("Player");
-        transform.position = p.transform.position+offset;
-
         if (axes == RotationAxes.MouseXAndY)
         {
             float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
@@ -45,6 +39,5 @@ public class CameraFollow : MonoBehaviour
 
             transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
         }
-        //Debug.Log(transform.rotation);
     }
 }
