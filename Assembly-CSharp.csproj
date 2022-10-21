@@ -58,9 +58,9 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Player\Player.cs" />
     <Compile Include="Assets\Scripts\Player\CameraControl.cs" />
-    <Compile Include="Assets\Scripts\Item.cs" />
+    <Compile Include="Assets\Scripts\Items\Item.cs" />
     <Compile Include="Assets\Scripts\Player\MoveControl.cs" />
-    <Compile Include="Assets\Scripts\ItemObject.cs" />
+    <Compile Include="Assets\Scripts\Items\ItemObject.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerManager.cs" />
     <Compile Include="Assets\Scripts\Player\FollowObject.cs" />
   </ItemGroup>

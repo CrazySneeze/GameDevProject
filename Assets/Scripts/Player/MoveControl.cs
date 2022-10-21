@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Burst.CompilerServices;
 using UnityEngine;
 
@@ -71,8 +72,18 @@ public class MoveControl : MonoBehaviour
 
                     //adds the item hit by the raycast to the players inventory
                     var p = GameObject.FindGameObjectWithTag("PlayerManager");
+
                     var item = hit.transform.GetComponent<ItemObject>();
-                    p.GetComponent<PlayerManager>().player.addItem(item.item, item.Count);
+
+                    if (item.Tags.Contains("Weapon"))
+                    {
+                        p.GetComponent<PlayerManager>().player.addWeapon(new Weapon(item.ID, item.name, item.Description, item.Tags, int.Parse(item.Tags[1]), item.Tags[2]), item.Count);
+                    }
+                    else
+                    {
+                        p.GetComponent<PlayerManager>().player.addItem(item.item, item.Count);
+                    }
+                    
                     Debug.Log(p.GetComponent<PlayerManager>().player.invToStr());
 
                     //destorys the object hit by the raycast
