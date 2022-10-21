@@ -12,11 +12,9 @@ public class MoveControl : MonoBehaviour
 
     private Rigidbody rb;
 
-    private RaycastHit hit;
-
     void Start()
     {
-        rb = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<Rigidbody>();
+        rb = transform.GetComponent<Rigidbody>();
     }
 
     void Update()
@@ -29,7 +27,7 @@ public class MoveControl : MonoBehaviour
             {
                 if (rb.velocity.y <= 0.1 && rb.velocity.y >= -0.1)
                 {
-                    //rb.velocity = jumpForce;
+                    rb.velocity = jumpForce;
                     canJump = false;
                 }
             }
@@ -55,46 +53,6 @@ public class MoveControl : MonoBehaviour
         if (Input.GetKey(KeyCode.S))
         {
             changePos += new Vector3(-transform.forward.x, 0, -transform.forward.z) * Time.deltaTime * moveSpeed;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                Debug.Log("Did Hit " + hit.transform.tag);
-
-                if (hit.transform.tag.Equals("Item"))
-                {
-                    //debug to visualise ray when in editor
-                    Debug.DrawRay(transform.position, ray.direction * hit.distance, Color.yellow);
-
-                    //adds the item hit by the raycast to the players inventory
-                    var p = GameObject.FindGameObjectWithTag("PlayerManager");
-
-                    var item = hit.transform.GetComponent<ItemObject>();
-
-                    if (item.Tags.Contains("Weapon"))
-                    {
-                        p.GetComponent<PlayerManager>().player.addWeapon(new Weapon(item.ID, item.name, item.Description, item.Tags, int.Parse(item.Tags[1]), item.Tags[2]), item.Count);
-                    }
-                    else
-                    {
-                        p.GetComponent<PlayerManager>().player.addItem(item.item, item.Count);
-                    }
-                    
-                    Debug.Log(p.GetComponent<PlayerManager>().player.invToStr());
-
-                    //destorys the object hit by the raycast
-                    Destroy(hit.transform.gameObject);
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, ray.direction * 1000, Color.white);
-                Debug.Log("Did not Hit");
-            }
         }
 
         return changePos;
