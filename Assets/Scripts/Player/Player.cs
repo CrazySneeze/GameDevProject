@@ -15,14 +15,16 @@ public class Player
 
     public void addItem(Item item, int count)
     {
-        if (!inventory.ContainsKey(item))
+        foreach(var a in inventory.Keys)
         {
-            inventory.Add(item, count);
+            if (a.Name == item.Name)
+            {
+                inventory[a] += count;
+                return;
+            }
         }
-        else
-        {
-            inventory[item] += count;
-        }
+
+        inventory.Add(item, count);
     }
 
     public string invToStr()
