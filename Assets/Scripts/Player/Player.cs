@@ -1,19 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class Player
 {
     Vector3 pos;
-    Dictionary<Item, int> inventory;
-    Dictionary<Weapon, int> weapons;
+    public Dictionary<Item, int> inventory { get; set; }
+    public List<Weapon> weapons { get; set; }
 
     public Player(Vector3 pos)
     {
         this.pos = pos;
         this.inventory = new Dictionary<Item, int>();
-        this.weapons = new Dictionary<Weapon, int>();
+        this.weapons = new List<Weapon>();
     }
 
     public void addItem(Item item, int count)
@@ -30,25 +29,36 @@ public class Player
         inventory.Add(item, count);
     }
 
-    public void addWeapon(Weapon weapon, int count)
+    public void addWeapon(Weapon weapon)
     {
-        foreach (var a in weapons.Keys)
+        weapons.Add(weapon);
+    }
+
+    public void removeItem(Item item, int count)
+    {
+        foreach (var a in inventory.Keys)
         {
-            if (a.Name == weapon.Name)
+            if (a.Name == item.Name)
             {
-                weapons[a] += count;
+                if (count - inventory[a] <= 0)
+                {
+                    inventory.Remove(a);
+                }
+                else
+                {
+                    inventory[a] -= count;
+                }
                 return;
             }
         }
-
-        weapons.Add(weapon, count);
     }
+
     public string invToStr()
     {
         string output = "";
         foreach(var a in weapons)
         {
-            output += a.Key.Name + " " + a.Key.Description + " " + a.Key.Ammo + " " + a.Key.Damage + " " + a.Value.ToString() + "\n";
+            output += a.Name + " " + a.Description + " " + a.Ammo + " " + a.Damage + "\n";
         }
         foreach (var a in inventory)
         {

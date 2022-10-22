@@ -53,6 +53,7 @@ MonoBehaviour:
   maximumX: 360
   minimumY: -60
   maximumY: 60
+  bullet: {fileID: 8129087695779948686, guid: bcfd39f69a30c5b4d9bf63c0b698b8fd, type: 3}
 --- !u!114 &3908006165909145181
 MonoBehaviour:
   m_ObjectHideFlags: 0

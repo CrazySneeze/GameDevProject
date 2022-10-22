@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3119325664367287784}
   - component: {fileID: 8155175950650941626}
   m_Layer: 0
-  m_Name: Shotgun
+  m_Name: Pistol
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -97,16 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d51365a01ae4a434dae9233503418457, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ID: Shotgun
-  Name: Shotgun
-  Description: A double barrel shotgun
+  ID: Pistol
+  Name: Pistol
+  Description: A basic semi auto pistol with an 8 round magazine
   _Tags:
   - Type:Weapon
-  - ShotType:Spread
-  - ShotCount:10
+  - ShotType:Single
+  - ShotCount:1
   - Size:1
   - Speed:50
-  - Magazine:2
+  - Magazine:8
   Count: 1
 --- !u!65 &8155175950650941626
 BoxCollider:

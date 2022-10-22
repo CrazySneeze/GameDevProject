@@ -1,11 +1,13 @@
+using System;
+using System.Linq;
 public class Item
 {
     protected string _ID;
     protected string _Name;
     protected string _Description;
-    protected string[] _Tags;
+    protected Tuple<string, string>[] _Tags;
 
-    public Item (string ID, string Name, string Description, string[] tags)
+    public Item (string ID, string Name, string Description, Tuple<string, string>[] tags)
     {
         _ID = ID;
         _Name = Name;
@@ -32,7 +34,7 @@ public class Item
         set { this._Description = value; }
     }
 
-    public string[] Tags
+    public Tuple<string, string>[] Tags
     {
         get { return _Tags; }
         set { this._Tags = value; }
@@ -43,7 +45,8 @@ public class Weapon : Item
 {
     private int _Damage;
     private string _Ammo;
-    public Weapon(string ID, string Name, string Description, string[] tags, int damage, string ammo) : base(ID, Name, Description, tags)
+    private int _Magazine;
+    public Weapon(string ID, string Name, string Description, Tuple<string, string>[] tags, int damage, string ammo, int Magazine) : base(ID, Name, Description, tags)
     {
         _ID = ID;
         _Name = Name;
@@ -51,6 +54,7 @@ public class Weapon : Item
         _Tags = tags;
         _Damage = damage;
         _Ammo = ammo;
+        _Magazine = Magazine;
     }
 
     public int Damage
@@ -64,4 +68,12 @@ public class Weapon : Item
         get { return _Ammo; }
         set { this._Ammo = value; }
     }
+
+    public int Magazine
+    {
+        get { return _Magazine; }
+        set { this._Magazine = value; }
+    }
+
+    public int AmmoCount { get; set; }
 }

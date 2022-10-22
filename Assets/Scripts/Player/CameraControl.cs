@@ -21,6 +21,8 @@ public class CameraControl : MonoBehaviour
 
     private RaycastHit hit;
 
+    public GameObject bullet;
+
     void Update()
     {
         if (axes == RotationAxes.MouseXAndY)
@@ -43,7 +45,9 @@ public class CameraControl : MonoBehaviour
             transform.localEulerAngles = new Vector3(-rotationY, transform.localEulerAngles.y, 0);
         }
 
-        if (Input.GetKeyDown(KeyCode.Mouse0))
+        var player = GameObject.FindGameObjectWithTag("PlayerManager").GetComponent<PlayerManager>();
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
             //Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Ray ray = new Ray(transform.position, transform.rotation * Vector3.forward);
@@ -57,21 +61,28 @@ public class CameraControl : MonoBehaviour
                     //debug to visualise ray when in editor
                     Debug.DrawRay(transform.position, ray.direction * hit.distance, Color.yellow);
 
-                    //adds the item hit by the raycast to the players inventory
-                    var p = GameObject.FindGameObjectWithTag("PlayerManager");
+                    //adds the item hit by the raycast to the players inventory;
 
                     var item = hit.transform.GetComponent<ItemObject>();
-
-                    if (item.Tags.Contains("Weapon"))
+                    if (item.Tags[0].Item2.Equals("Weapon"))
                     {
-                        p.GetComponent<PlayerManager>().player.addWeapon(new Weapon(item.ID, item.name, item.Description, item.Tags, int.Parse(item.Tags[1]), item.Tags[2]), item.Count);
+                        int Damage = 0;
+                        string Ammo = "";
+                        int MagSize = 0;
+                        foreach (var a in item.Tags)
+                        {
+                            if (a.Item1.Equals("Damage")) { Damage = int.Parse(a.Item2); }
+                            else if (a.Item1.Equals("Ammo")) { Ammo = a.Item2; }
+                            else if (a.Item1.Equals("Magazine")) { MagSize = int.Parse(a.Item2); }
+                        }
+                        player.player.addWeapon(new Weapon(item.ID, item.name, item.Description, item.Tags, Damage, Ammo, MagSize));
                     }
                     else
                     {
-                        p.GetComponent<PlayerManager>().player.addItem(item.item, item.Count);
+                        player.player.addItem(item.item, item.Count);
                     }
 
-                    Debug.Log(p.GetComponent<PlayerManager>().player.invToStr());
+                    Debug.Log(player.player.invToStr());
 
                     //destorys the object hit by the raycast
                     Destroy(hit.transform.gameObject);
@@ -82,6 +93,64 @@ public class CameraControl : MonoBehaviour
                 Debug.DrawRay(transform.position, ray.direction * 1000, Color.white);
                 Debug.Log("Did not Hit");
             }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            if (player.weapon != null)
+            {
+                string ShotType = "Single";
+                int ShotCount = 1;
+                int Size = 1;
+                int Speed = 1;
+
+                if (player.weapon.AmmoCount > 0)
+                {
+
+                    foreach (var a in player.weapon.Tags)
+                    {
+                        if (a.Item1.Equals("ShotType")) { ShotType = a.Item2; }
+                        else if (a.Item1.Equals("ShotCount")) { ShotCount = int.Parse(a.Item2); }
+                        else if (a.Item1.Equals("Size")) { Size = int.Parse(a.Item2); }
+                        else if (a.Item1.Equals("Speed")) { Speed = int.Parse(a.Item2); }
+                    }
+
+
+                    if (ShotType.Equals("Single"))
+                    {
+                        var obj = (GameObject)Instantiate(bullet, transform.position + transform.rotation * Vector3.forward, Quaternion.identity);
+                        obj.GetComponent<Rigidbody>().velocity = transform.rotation * Vector3.forward * Speed;
+                    }
+
+                    else if (ShotType.Equals("Spread"))
+                    {
+                        for (int i = 0; i < ShotCount; i++)
+                        {
+                            var obj = (GameObject)Instantiate(
+                                bullet,
+                                transform.position + transform.rotation * Vector3.forward,
+                                Quaternion.Euler(
+                                    Random.Range(-7, 7) + transform.rotation.eulerAngles.x,
+                                    Random.Range(-7, 7) + transform.rotation.eulerAngles.y,
+                                    transform.rotation.eulerAngles.z)
+                                );
+                            obj.GetComponent<Rigidbody>().velocity = obj.transform.rotation * Vector3.forward * Speed;
+                        }
+                    }
+
+                    player.weapon.AmmoCount--;
+                }
+
+                else
+                {
+                    Debug.Log("Out Of Ammo");
+                }
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            player.weapon.AmmoCount = player.weapon.Magazine;
         }
     }
 }
